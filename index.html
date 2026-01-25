@@ -7,16 +7,24 @@
     <style>
         :root {
             --accent-blue: #0071e3;
-            --bg-gray: #e5e5e7;
+            --ios-green: #34c759;
+            --bg-light: radial-gradient(circle at center, #ffffff 0%, #d2d2d7 100%);
+            --bg-dark: radial-gradient(circle at center, #2c2c2e 0%, #000000 100%);
         }
 
         body {
-            background: radial-gradient(circle at center, #ffffff 0%, #d2d2d7 100%);
+            background: var(--bg-light);
             background-attachment: fixed;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             margin: 0; padding: 0;
             color: #1d1d1f;
             min-height: 100vh;
+            transition: all 0.5s ease;
+        }
+
+        body.karanlik-tema {
+            background: var(--bg-dark);
+            color: #f5f5f7;
         }
 
         header {
@@ -24,48 +32,122 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             position: sticky; top: 0; z-index: 1000;
             border-bottom: 1px solid rgba(0,0,0,0.1);
+            transition: all 0.5s ease;
+        }
+
+        .karanlik-tema header {
+            background: rgba(0, 0, 0, 0.7);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
         .logo-container { display: flex; align-items: center; gap: 10px; }
         .logo-img { width: 40px; height: 40px; border-radius: 10px; object-fit: cover; }
         .logo-text { font-weight: 800; font-size: 1.2rem; }
 
-        .hero { text-align: center; padding: 50px 20px; }
-        .hero h1 { font-size: 3rem; margin-bottom: 10px; letter-spacing: -2px; }
+        /* MOD KONTROL & SWITCH */
+        .mod-kontrol {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        #mod-durum {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 54px;
+            height: 30px;
+        }
+
+        .switch input { opacity: 0; width: 0; height: 0; }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #d1d1d6;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "☀️";
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            height: 24px;
+            width: 24px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        input:checked + .slider { background-color: var(--ios-green); }
+
+        input:checked + .slider:before {
+            transform: translateX(24px);
+            content: "🌙";
+        }
+
+        /* HERO & URUN KARTLARI */
+        .hero { text-align: center; padding: 60px 5% 30px; }
+        .hero h1 { font-size: 3.2rem; margin-bottom: 10px; letter-spacing: -2px; }
 
         .urun-konteynir {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px; padding: 20px 5% 80px;
+            gap: 30px; padding: 0 8% 80px;
         }
 
         .urun-kart {
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border-radius: 30px; padding: 20px;
             text-align: center; border: 1px solid rgba(255,255,255,0.3);
-            transition: 0.3s;
+            transition: 0.4s ease;
         }
 
-        .urun-kart:hover { transform: translateY(-10px); background: rgba(255, 255, 255, 0.8); }
+        .karanlik-tema .urun-kart {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255,255,255,0.1);
+        }
+
+        .urun-kart:hover { transform: translateY(-12px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
 
         .resim-cerceve {
-            width: 100%; height: 250px; border-radius: 20px;
-            background: white; margin-bottom: 15px; overflow: hidden;
+            width: 100%; height: 260px; border-radius: 20px;
+            background: white; margin-bottom: 20px; overflow: hidden;
         }
 
         .resim-cerceve img { width: 100%; height: 100%; object-fit: contain; }
 
-        .fiyat { font-size: 1.5rem; font-weight: 800; display: block; margin: 15px 0; color: var(--accent-blue); }
+        .fiyat { font-size: 1.6rem; font-weight: 800; display: block; margin: 15px 0; color: var(--accent-blue); }
 
         .satin-al-btn {
             background: #1d1d1f; color: white; text-decoration: none;
-            padding: 15px; border-radius: 15px; font-weight: 700; display: block;
+            padding: 15px; border-radius: 16px; font-weight: 700; display: block;
+            transition: 0.3s;
         }
+        
+        .karanlik-tema .satin-al-btn { background: var(--accent-blue); }
+        .satin-al-btn:hover { opacity: 0.9; transform: scale(0.98); }
     </style>
 </head>
 <body>
@@ -75,7 +157,13 @@
             <img src="logo.jpeg" alt="Logo" class="logo-img">
             <div class="logo-text">SO_ACCESSORY</div>
         </div>
-        <div style="font-weight: bold; font-size: 0.8rem; color: #86868b;">PREMIUM STORE</div>
+        <div class="mod-kontrol">
+            <span id="mod-durum">Gündüz</span>
+            <label class="switch">
+                <input type="checkbox" id="mod-switch">
+                <span class="slider"></span>
+            </label>
+        </div>
     </header>
 
     <section class="hero">
@@ -112,5 +200,18 @@
         </div>
     </main>
 
+    <script>
+        const s = document.getElementById('mod-switch');
+        const m = document.getElementById('mod-durum');
+        
+        s.addEventListener('change', () => {
+            document.body.classList.toggle('karanlik-tema');
+            if(document.body.classList.contains('karanlik-tema')) {
+                m.innerText = "Gece";
+            } else {
+                m.innerText = "Gündüz";
+            }
+        });
+    </script>
 </body>
 </html>
