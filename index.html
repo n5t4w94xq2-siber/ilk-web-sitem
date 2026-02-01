@@ -2,57 +2,38 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SO_ACCESSORY</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>S | SO_ACCESSORY</title>
     <style>
         :root { 
             --bg: #ffffff; --card: #f5f5f7; --text: #1d1d1f; 
-            --pink: #ff2d55; --wa-green: #2ecc71; --header-bg: rgba(255, 255, 255, 0.8);
+            --pink: #ff2d55; --wa-green: #2ecc71; --header-bg: rgba(255, 255, 255, 0.85);
             --pink-grad: linear-gradient(90deg, #ff2d55, #ff37a6);
         }
         .dark { 
             --bg: #000000; --card: #1c1c1e; --text: #f5f5f7; 
-            --header-bg: rgba(0, 0, 0, 0.8);
+            --header-bg: rgba(0, 0, 0, 0.85);
         }
-        body { background-color: var(--bg); color: var(--text); font-family: -apple-system, system-ui, sans-serif; margin: 0; transition: 0.5s; overflow-x: hidden; }
+        body { background-color: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; transition: 0.5s; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
         
-        header { position: sticky; top: 0; z-index: 1000; padding: 15px 8%; display: flex; justify-content: space-between; align-items: center; background: var(--header-bg); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.05); }
+        header { position: sticky; top: 0; z-index: 1000; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; background: var(--header-bg); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.05); }
 
-        /* HERO - RECONSTRUCTED */
-        .hero { height: 45vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        /* HERO SECTION */
+        .hero { min-height: 40vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 20px; box-sizing: border-box; }
         
         .hero-title { 
-            font-size: clamp(2rem, 8vw, 4rem); font-weight: 800; margin: 0; letter-spacing: -2px; 
-            display: flex; align-items: center; justify-content: center; line-height: 1;
+            font-size: clamp(2rem, 6vw, 4rem); font-weight: 800; margin: 0; letter-spacing: -2px; 
+            display: flex; align-items: center; justify-content: center; line-height: 1.1;
         }
 
         .tarzini {
-            background: var(--pink-grad);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            background: var(--pink-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             margin-right: 12px;
         }
 
-        .flow-box {
-            height: 1.1em;
-            overflow: hidden;
-            display: inline-block;
-            vertical-align: bottom;
-            text-align: left;
-        }
-
-        .flow-inner {
-            display: flex;
-            flex-direction: column;
-            animation: slideUp 10s cubic-bezier(0.76, 0, 0.24, 1) infinite;
-        }
-
-        .flow-inner span {
-            height: 1.1em;
-            color: var(--pink); /* Sabit pembe, render hatasını önler */
-            display: block;
-            white-space: nowrap;
-        }
+        .flow-box { height: 1.1em; overflow: hidden; display: inline-block; vertical-align: middle; }
+        .flow-inner { display: flex; flex-direction: column; animation: slideUp 10s cubic-bezier(0.76, 0, 0.24, 1) infinite; }
+        .flow-inner span { height: 1.1em; color: var(--pink); display: flex; align-items: center; white-space: nowrap; }
 
         @keyframes slideUp {
             0%, 20% { transform: translateY(0); }
@@ -62,32 +43,38 @@
             100% { transform: translateY(0); }
         }
 
-        .hero p { font-size: 1rem; color: #86868b; margin-top: 20px; max-width: 450px; line-height: 1.5; }
+        .hero p { font-size: clamp(0.95rem, 2vw, 1.1rem); color: #86868b; margin: 20px auto 0; max-width: 550px; line-height: 1.5; width: 90%; }
 
-        /* GRID & CARDS */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; padding: 0 8% 100px; }
-        .kart { background: var(--card); border-radius: 25px; padding: 20px; transition: 0.4s; display: flex; flex-direction: column; border: 1px solid rgba(0,0,0,0.03); }
-        .kart:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
+        /* GRID SYSTEM */
+        .main-container { max-width: 1400px; margin: 0 auto; width: 100%; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 30px; padding: 0 5% 100px; justify-items: center; }
+
+        .kart { 
+            background: var(--card); border-radius: 28px; padding: 25px; transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); 
+            display: flex; flex-direction: column; border: 1px solid rgba(0,0,0,0.02); width: 100%; max-width: 320px; box-sizing: border-box;
+        }
+        .kart:hover { transform: translateY(-10px) scale(1.02); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
         
-        .side-panel { position: fixed; top: 0; right: -450px; width: 400px; height: 100vh; background: var(--bg); z-index: 2000; transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1); padding: 30px; box-sizing: border-box; box-shadow: -10px 0 30px rgba(0,0,0,0.05); }
+        /* UI ELEMENTS */
+        .side-panel { position: fixed; top: 0; right: -100%; width: 400px; height: 100vh; background: var(--bg); z-index: 2000; transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1); padding: 30px; box-sizing: border-box; box-shadow: -15px 0 35px rgba(0,0,0,0.08); }
         .side-panel.open { right: 0; }
         
-        .icon-btn { position: relative; cursor: pointer; font-size: 1.4rem; background: none; border: none; color: inherit; transition: 0.3s; }
-        .icon-btn:active { transform: scale(0.9); }
-        .badge { position: absolute; top: -5px; right: -8px; background: var(--pink); color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 10px; font-weight: bold; }
+        .icon-btn { position: relative; cursor: pointer; font-size: 1.4rem; background: none; border: none; color: inherit; transition: 0.2s; }
+        .badge { position: absolute; top: -5px; right: -8px; background: var(--pink); color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 10px; font-weight: bold; border: 2px solid var(--bg); }
         
-        @media (max-width: 600px) { 
+        @media (max-width: 768px) { 
             .side-panel { width: 100%; } 
-            .hero-title { font-size: 2.2rem; flex-wrap: wrap; }
-            .grid { grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px; }
+            .hero-title { font-size: 2.1rem; }
+            .grid { grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
+            .kart { padding: 15px; border-radius: 22px; max-width: none; }
         }
     </style>
 </head>
 <body>
 
 <header>
-    <div style="font-weight: 900; font-size: 1.2rem; cursor:pointer" onclick="location.reload()">SO_ACCESSORY</div>
-    <div style="display:flex; align-items:center; gap:20px;">
+    <div style="font-weight: 900; font-size: 1.2rem; cursor:pointer; letter-spacing: -1px;" onclick="location.reload()">SO_ACCESSORY</div>
+    <div style="display:flex; align-items:center; gap:18px;">
         <div id="u-display" onclick="handleU()" style="cursor:pointer; font-size: 0.85rem; font-weight:700; color:var(--pink)">Giriş</div>
         <button class="icon-btn" onclick="toggleP('fav-p')">❤️<span id="f-count" class="badge">0</span></button>
         <button class="icon-btn" onclick="toggleP('cart-p')">👜<span id="c-count" class="badge">0</span></button>
@@ -95,48 +82,49 @@
     </div>
 </header>
 
-<section class="hero">
-    <h1 class="hero-title">
-        <span class="tarzini">Tarzını</span>
-        <div class="flow-box">
-            <div class="flow-inner">
-                <span>Yansıt.</span>
-                <span>Değiştir.</span>
-                <span>Konuştur.</span>
-                <span>Tamamla.</span>
+<div class="main-container">
+    <section class="hero">
+        <h1 class="hero-title">
+            <span class="tarzini">Tarzını</span>
+            <div class="flow-box">
+                <div class="flow-inner">
+                    <span>Yansıt.</span>
+                    <span>Değiştir.</span>
+                    <span>Konuştur.</span>
+                    <span>Tamamla.</span>
+                </div>
             </div>
-        </div>
-    </h1>
-    <p>Aksesuar sadece bir detay değil, senin sessiz imzandır. Her gününü SO_ACCESSORY ile parlat.</p>
-</section>
+        </h1>
+        <p>Aksesuar senin sessiz imzandır. SO_ACCESSORY ile her gününe asil bir dokunuş ekle.</p>
+    </section>
+    <main class="grid" id="p-grid"></main>
+</div>
 
-<main class="grid" id="p-grid"></main>
-
-<div id="auth-modal" style="position:fixed; inset:0; background:rgba(0,0,0,0.5); backdrop-filter:blur(10px); z-index:3000; display:none; align-items:center; justify-content:center;">
-    <div style="background:var(--bg); padding:40px; border-radius:30px; width:320px; text-align:center; position:relative;">
-        <button onclick="closeA()" style="position:absolute; top:20px; right:20px; border:none; background:none; cursor:pointer; font-size:1.2rem">✕</button>
-        <h2 style="margin-bottom:20px">Giriş Yap</h2>
-        <input type="text" id="ln" placeholder="İsminiz" style="width:100%; padding:15px; margin-bottom:15px; border-radius:12px; border:1px solid #ddd; outline:none;">
-        <button onclick="login()" style="width:100%; padding:15px; background:var(--text); color:var(--bg); border:none; border-radius:15px; font-weight:700; cursor:pointer;">Giriş</button>
+<div id="auth-modal" style="position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(15px); z-index:3000; display:none; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg); padding:40px; border-radius:35px; width:100%; max-width:340px; text-align:center; position:relative; box-shadow: 0 25px 50px rgba(0,0,0,0.2);">
+        <button onclick="closeA()" style="position:absolute; top:20px; right:20px; border:none; background:none; cursor:pointer; font-size:1.5rem; color:#888;">✕</button>
+        <h2 style="margin-bottom:25px; font-weight:800;">Hoş Geldin</h2>
+        <input type="text" id="ln" placeholder="İsminiz" style="width:100%; padding:16px; margin-bottom:15px; border-radius:15px; border:1px solid #eee; background:var(--card); color:var(--text); outline:none; font-size:1rem;">
+        <button onclick="login()" style="width:100%; padding:16px; background:var(--text); color:var(--bg); border:none; border-radius:18px; font-weight:700; cursor:pointer;">Devam Et</button>
     </div>
 </div>
 
 <div id="cart-p" class="side-panel">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px">
-        <h2>Sepetim 👜</h2>
-        <button onclick="toggleP('cart-p')" style="background:none; border:none; font-size:1.5rem; cursor:pointer">✕</button>
+        <h2 style="font-weight:800;">Sepetim 👜</h2>
+        <button onclick="toggleP('cart-p')" style="background:none; border:none; font-size:1.8rem; cursor:pointer">✕</button>
     </div>
     <div id="c-items" style="flex:1; overflow-y:auto"></div>
     <div style="margin-top:auto; padding-top:20px; border-top:1px solid rgba(0,0,0,0.05)">
-        <div style="display:flex; justify-content:space-between; font-weight:800; font-size:1.3rem; margin-bottom:20px"><span>Toplam</span> <span id="t-price">0 TL</span></div>
-        <button onclick="order()" style="width:100%; padding:18px; background:var(--wa-green); color:white; border:none; border-radius:15px; font-weight:800; cursor:pointer;">WhatsApp'tan Gönder</button>
+        <div style="display:flex; justify-content:space-between; font-weight:800; font-size:1.4rem; margin-bottom:20px"><span>Toplam</span> <span id="t-price">0 TL</span></div>
+        <button onclick="order()" style="width:100%; padding:20px; background:var(--wa-green); color:white; border:none; border-radius:20px; font-weight:800; cursor:pointer;">WhatsApp İle Sipariş</button>
     </div>
 </div>
 
 <div id="fav-p" class="side-panel">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px">
-        <h2>Favoriler ❤️</h2>
-        <button onclick="toggleP('fav-p')" style="background:none; border:none; font-size:1.5rem; cursor:pointer">✕</button>
+        <h2 style="font-weight:800;">Favoriler ❤️</h2>
+        <button onclick="toggleP('fav-p')" style="background:none; border:none; font-size:1.8rem; cursor:pointer">✕</button>
     </div>
     <div id="f-items"></div>
 </div>
@@ -150,19 +138,19 @@
         { id: 4, ad: "Roma Rakamlı Zümrüt Kolye", fiyat: 200, resim: "https://cdn.shopier.app/pictures_large/SO_ACCESSORY_13cde4ecda550267783ce66fa91576a8.jpeg" }
     ];
 
-    let cart = JSON.parse(localStorage.getItem('c_v27')) || [];
-    let favs = JSON.parse(localStorage.getItem('f_v27')) || [];
-    let user = JSON.parse(localStorage.getItem('u_v27')) || null;
+    let cart = JSON.parse(localStorage.getItem('c_v30')) || [];
+    let favs = JSON.parse(localStorage.getItem('f_v30')) || [];
+    let user = JSON.parse(localStorage.getItem('u_v30')) || null;
 
     function render() {
         document.getElementById('p-grid').innerHTML = products.map(p => `
             <div class="kart">
-                <div style="height:180px; display:flex; align-items:center; justify-content:center; margin-bottom:15px;"><img src="${p.resim}" style="max-width:90%; max-height:90%; border-radius:15px"></div>
-                <h3 style="text-align:center; font-size:0.95rem; margin:0 0 10px;">${p.ad}</h3>
-                <div style="text-align:center; font-weight:800; color:var(--pink); margin-bottom:15px;">${p.fiyat} TL</div>
-                <div style="display:flex; gap:8px; margin-top:auto;">
-                    <button onclick="add(${p.id})" style="flex:1; background:var(--text); color:var(--bg); border:none; padding:12px; border-radius:12px; font-weight:700; cursor:pointer;">Ekle</button>
-                    <button class="icon-btn" onclick="toggleF(${p.id})" style="width:45px; background:rgba(255,45,85,0.05); border-radius:12px; color:var(--pink);">${favs.includes(p.id)?'❤️':'🤍'}</button>
+                <div style="height:180px; display:flex; align-items:center; justify-content:center; margin-bottom:15px;"><img src="${p.resim}" style="max-width:90%; max-height:90%; border-radius:15px;"></div>
+                <h3 style="text-align:center; font-size:1rem; margin:0 0 10px; font-weight:600;">${p.ad}</h3>
+                <div style="text-align:center; font-weight:800; color:var(--pink); margin-bottom:18px;">${p.fiyat} TL</div>
+                <div style="display:flex; gap:10px; margin-top:auto;">
+                    <button onclick="add(${p.id})" style="flex:1; background:var(--text); color:var(--bg); border:none; padding:12px; border-radius:15px; font-weight:700; cursor:pointer;">Ekle</button>
+                    <button class="icon-btn" onclick="toggleF(${p.id})" style="width:48px; height:48px; background:rgba(255,45,85,0.06); border-radius:15px; color:var(--pink);">${favs.includes(p.id)?'❤️':'🤍'}</button>
                 </div>
             </div>`).join('');
     }
@@ -173,11 +161,11 @@
         save(); toggleP('cart-p');
     }
     function updateQty(id, d) { const i = cart.find(c => c.id === id); if(i) { i.adet += d; if(i.adet <= 0) cart = cart.filter(c => c.id !== id); save(); } }
-    function save() { localStorage.setItem('c_v27', JSON.stringify(cart)); updateC(); }
+    function save() { localStorage.setItem('c_v30', JSON.stringify(cart)); updateC(); }
     
     function order() {
         if(!cart.length) return;
-        if(!user) { alert("Lütfen giriş yapın!"); handleU(); return; }
+        if(!user) { handleU(); return; }
         let m = `*SO_ACCESSORY SİPARİŞ*%0A*Müşteri:* ${user.n}%0A-----------------%0A`;
         cart.forEach(i => m += `• ${i.ad} x${i.adet}%0A`);
         m += `-----------------%0A*Toplam:* ${document.getElementById('t-price').innerText}`;
@@ -194,10 +182,10 @@
         let t = 0;
         document.getElementById('c-items').innerHTML = cart.map(i => {
             t += (i.fiyat * i.adet);
-            return `<div style="display:flex; align-items:center; gap:10px; margin-bottom:12px; background:rgba(0,0,0,0.02); padding:10px; border-radius:12px">
-                <img src="${i.resim}" width="50" style="border-radius:8px">
-                <div style="flex:1; font-size:0.8rem"><b>${i.ad}</b></div>
-                <div style="display:flex; align-items:center; gap:5px;">
+            return `<div style="display:flex; align-items:center; gap:12px; margin-bottom:15px; background:rgba(120,120,120,0.05); padding:12px; border-radius:15px">
+                <img src="${i.resim}" width="50" style="border-radius:10px">
+                <div style="flex:1; font-size:0.85rem"><b>${i.ad}</b></div>
+                <div style="display:flex; align-items:center; gap:8px;">
                     <button onclick="updateQty(${i.id},-1)" style="border:none; background:none; cursor:pointer;">-</button>
                     <b>${i.adet}</b>
                     <button onclick="updateQty(${i.id},1)" style="border:none; background:none; cursor:pointer;">+</button>
@@ -207,12 +195,12 @@
         document.getElementById('t-price').innerText = t + " TL";
     }
 
-    function login() { const n = document.getElementById('ln').value; if(n) { user = {n}; localStorage.setItem('u_v27', JSON.stringify(user)); closeA(); updateU(); } }
-    function handleU() { if(!user) document.getElementById('auth-modal').style.display='flex'; else if(confirm("Çıkış?")) { user = null; localStorage.removeItem('u_v27'); updateU(); } }
+    function login() { const n = document.getElementById('ln').value; if(n) { user = {n}; localStorage.setItem('u_v30', JSON.stringify(user)); closeA(); updateU(); } }
+    function handleU() { if(!user) document.getElementById('auth-modal').style.display='flex'; else if(confirm("Çıkış?")) { user = null; localStorage.removeItem('u_v30'); updateU(); } }
     function updateU() { document.getElementById('u-display').innerText = user ? user.n : "Giriş"; }
     function closeA() { document.getElementById('auth-modal').style.display='none'; }
     function toggleP(id) { document.getElementById(id).classList.toggle('open'); }
-    function toggleF(id) { if(favs.includes(id)) favs = favs.filter(f => f!==id); else favs.push(id); localStorage.setItem('f_v27', JSON.stringify(favs)); document.getElementById('f-count').innerText = favs.length; render(); }
+    function toggleF(id) { if(favs.includes(id)) favs = favs.filter(f => f!==id); else favs.push(id); localStorage.setItem('f_v30', JSON.stringify(favs)); document.getElementById('f-count').innerText = favs.length; render(); }
     
     window.addEventListener('DOMContentLoaded', () => { render(); updateC(); updateU(); document.getElementById('f-count').innerText = favs.length; });
 </script>
