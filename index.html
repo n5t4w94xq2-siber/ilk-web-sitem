@@ -3,278 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SO_ACCESSORY | Elite Club</title>
+    <title>SO_ACCESSORY</title>
     <style>
         :root { 
-            --bg: #f5f5f7; --card: #ffffff; --text: #1d1d1f; 
-            --accent: #0071e3; --wa-green: #2ecc71; --fav: #ff3b30; --header-bg: rgba(255, 255, 255, 0.8);
+            --bg: #ffffff; --card: #f5f5f7; --text: #1d1d1f; 
+            --accent: #0071e3; --wa-green: #2ecc71; --header-bg: rgba(255, 255, 255, 0.7);
+            --gradient: linear-gradient(135deg, #6e8efb, #a777e3, #eb5757);
+            --fav-red: #ff3b30;
         }
         .dark { 
             --bg: #000000; --card: #1c1c1e; --text: #f5f5f7; 
-            --header-bg: rgba(0, 0, 0, 0.8);
+            --header-bg: rgba(0, 0, 0, 0.7);
+            --gradient: linear-gradient(135deg, #a777e3, #6e8efb, #00d2ff);
         }
-        body { background-color: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; transition: 0.5s; overflow-x: hidden; }
+        body { background-color: var(--bg); color: var(--text); font-family: -apple-system, system-ui, sans-serif; margin: 0; transition: 0.5s; -webkit-font-smoothing: antialiased; }
         
-        header { position: sticky; top: 0; z-index: 1000; padding: 15px 8%; display: flex; justify-content: space-between; align-items: center; background: var(--header-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.05); }
+        header { position: sticky; top: 0; z-index: 1000; padding: 10px 8%; display: flex; justify-content: space-between; align-items: center; background: var(--header-bg); backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid rgba(0,0,0,0.05); }
         .nav-actions { display: flex; align-items: center; gap: 15px; }
         
-        .icon-btn { position: relative; cursor: pointer; font-size: 1.4rem; transition: 0.2s; background: none; border: none; color: inherit; display: flex; align-items: center; outline: none; }
-        .badge { position: absolute; top: -5px; right: -10px; background: var(--accent); color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 10px; font-weight: bold; }
-        
-        #user-display { font-size: 0.85rem; font-weight: 600; cursor: pointer; padding: 6px 14px; background: rgba(0,0,0,0.05); border-radius: 20px; text-transform: capitalize; }
-        .dark #user-display { background: rgba(255,255,255,0.1); }
+        .search-box { background: rgba(0,0,0,0.04); padding: 5px 12px; border-radius: 20px; display: flex; align-items: center; }
+        .dark .search-box { background: rgba(255,255,255,0.08); }
+        .search-box input { border: none; background: none; color: inherit; outline: none; width: 80px; font-size: 0.85rem; }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; padding: 40px 8%; min-height: 500px; }
-        .kart { background: var(--card); border-radius: 30px; padding: 20px; transition: 0.4s; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
-        .kart:hover { transform: translateY(-8px); }
-        
-        .img-box { background: #fbfbfd; border-radius: 20px; height: 260px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .dark .img-box { background: #2c2c2e; }
-        .kart img { max-width: 85%; max-height: 85%; object-fit: contain; }
+        /* HERO SECTION UPDATED */
+        .hero { height: 25vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 20px; }
+        .hero h1 { 
+            font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 800; margin: 0; letter-spacing: -2px;
+            background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .hero p { 
+            font-size: 1.1rem; color: #86868b; margin-top: 10px; font-weight: 400; max-width: 600px; line-height: 1.4;
+        }
 
-        .info h3 { margin: 15px 0 5px; font-size: 1.1rem; min-height: 2.5rem; }
-        .info p { color: var(--accent); font-weight: 800; font-size: 1.3rem; margin: 10px 0; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; padding: 20px 8% 80px; }
+        .kart { background: var(--card); border-radius: 30px; padding: 20px; transition: 0.4s; position: relative; display: flex; flex-direction: column; }
         
-        .btn-group { display: flex; gap: 10px; margin-top: 15px; }
-        .btn { padding: 15px; border-radius: 18px; border: none; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 0.9rem; }
-        .btn-add { flex: 1; background: var(--text); color: var(--bg); }
-        .btn-fav { width: 55px; background: rgba(0,0,0,0.04); font-size: 1.2rem; display: flex; align-items: center; justify-content: center; }
-        .btn-fav.active { color: var(--fav); background: rgba(255, 59, 48, 0.1) !important; }
-
-        .side-panel { position: fixed; top: 0; right: -450px; width: 380px; height: 100vh; background: var(--card); z-index: 2000; transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1); padding: 30px; box-shadow: -15px 0 50px rgba(0,0,0,0.1); box-sizing: border-box; display: flex; flex-direction: column; }
+        #auth-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(15px); z-index: 3000; display: none; align-items: center; justify-content: center; }
+        .modal-content { background: var(--bg); padding: 35px; border-radius: 30px; width: 340px; text-align: center; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
+        .modal-close-btn { position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.05); border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; }
+        
+        .side-panel { position: fixed; top: 0; right: -450px; width: 400px; height: 100vh; background: var(--bg); z-index: 2000; transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1); padding: 30px; box-sizing: border-box; display: flex; flex-direction: column; box-shadow: -10px 0 40px rgba(0,0,0,0.1); }
         .side-panel.open { right: 0; }
         
-        #auth-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); z-index: 3000; display: none; align-items: center; justify-content: center; }
-        .modal-content { background: var(--card); padding: 40px; border-radius: 35px; width: 340px; text-align: center; }
-        .input-group { position: relative; width: 100%; margin: 8px 0; }
-        .input-group input { width: 100%; padding: 16px; border-radius: 15px; border: 1px solid rgba(0,0,0,0.05); background: rgba(0,0,0,0.02); box-sizing: border-box; font-size: 1rem; color: inherit; outline: none; }
-        .pass-toggle { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; opacity: 0.5; font-size: 1.2rem; }
+        .badge { position: absolute; top: -5px; right: -8px; background: var(--accent); color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 10px; }
+        .icon-btn { position: relative; cursor: pointer; font-size: 1.3rem; background: none; border: none; color: inherit; transition: 0.3s; }
+        .input-group input, .input-group textarea { width: 100%; padding: 14px; margin: 8px 0; border-radius: 12px; border: 1px solid rgba(0,0,0,0.1); background: rgba(0,0,0,0.02); color: inherit; outline: none; box-sizing: border-box; }
 
-        .qty-controls { display: flex; align-items: center; gap: 10px; margin-top: 8px; background: rgba(0,0,0,0.03); width: fit-content; padding: 5px 10px; border-radius: 12px; }
-        .list-item { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(0,0,0,0.03); }
-        .list-item img { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; }
-
-        @media (max-width: 600px) { .side-panel { width: 100%; } .grid { grid-template-columns: 1fr 1fr; gap: 12px; padding: 20px 12px; } }
+        @media (max-width: 600px) { .side-panel { width: 100%; } .grid { grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px; } }
     </style>
 </head>
 <body>
 
 <header>
-    <div style="font-weight: 900; font-size: 1.3rem;">SO_ACCESSORY</div>
+    <div style="font-weight: 900; font-size: 1.2rem; cursor:pointer" onclick="location.reload()">SO_ACCESSORY</div>
     <div class="nav-actions">
-        <div id="user-display" onclick="handleUserClick()">Giriş Yap</div>
-        <button class="icon-btn" onclick="togglePanel('fav-panel')">❤️<span id="fav-sayac" class="badge">0</span></button>
-        <button class="icon-btn" onclick="togglePanel('cart-panel')">👜<span id="cart-sayac" class="badge">0</span></button>
-        <button class="icon-btn" onclick="temaDegistir()" id="theme-btn">☀️</button>
+        <div class="search-box">🔍 <input type="text" id="searchInput" placeholder="Ara" oninput="search()"></div>
+        <div id="u-display" onclick="handleU()" style="cursor:pointer; font-size: 0.85rem; font-weight:600;">Giriş</div>
+        <button class="icon-btn" onclick="toggleP('fav-p')">❤️<span id="f-count" class="badge">0</span></button>
+        <button class="icon-btn" onclick="toggleP('cart-p')">👜<span id="c-count" class="badge">0</span></button>
+        <button class="icon-btn" onclick="tTheme()" id="t-btn">☀️</button>
     </div>
 </header>
 
-<div id="auth-modal">
-    <div class="modal-content" id="login-box">
-        <h2>Giriş Yap 🔐</h2>
-        <div class="input-group"><input type="text" id="login-name" placeholder="İsminiz"></div>
-        <div class="input-group">
-            <input type="password" id="login-pass" placeholder="Şifreniz">
-            <span class="pass-toggle" onclick="togglePass('login-pass')">👁️</span>
-        </div>
-        <button class="btn btn-add" style="width:100%; margin-top:10px" onclick="performLogin()">Giriş</button>
-        <p onclick="switchAuth('reg')" style="cursor:pointer; color:var(--accent); font-size:0.85rem; margin-top:20px; font-weight:600;">Hesabın yok mu? Kayıt Ol</p>
-        <button class="btn" onclick="document.getElementById('auth-modal').style.display='none'" style="margin-top:10px; background:none; opacity:0.3; width:100%">Kapat</button>
-    </div>
-    <div class="modal-content" id="reg-box" style="display:none">
-        <h2>Kayıt Ol ✨</h2>
-        <div class="input-group"><input type="text" id="reg-name" placeholder="İsminiz"></div>
-        <div class="input-group">
-            <input type="password" id="reg-pass" placeholder="Şifre Belirleyin">
-            <span class="pass-toggle" onclick="togglePass('reg-pass')">👁️</span>
-        </div>
-        <button class="btn btn-add" style="width:100%; margin-top:10px" onclick="performRegister()">Kayıt Ol</button>
-        <p onclick="switchAuth('login')" style="cursor:pointer; color:var(--accent); font-size:0.85rem; margin-top:20px; font-weight:600;">Zaten üye misin? Giriş Yap</p>
-    </div>
-</div>
-
-<div id="cart-panel" class="side-panel">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
-        <h2 style="margin:0">Çantam 👜</h2>
-        <span onclick="togglePanel('cart-panel')" style="cursor:pointer; opacity:0.3">✕</span>
-    </div>
-    <div id="cart-list" style="flex:1; overflow-y:auto"></div>
-    <div style="border-top: 1px solid rgba(0,0,0,0.05); padding-top:20px;">
-        <div style="display:flex; justify-content:space-between; font-weight:800; font-size:1.3rem; margin-bottom:20px;">
-            <span>Toplam:</span> <span id="cart-total">0 TL</span>
-        </div>
-        <button class="btn" style="background:var(--wa-green); color:white; width:100%" onclick="siparisVer()">💬 WhatsApp Siparişi</button>
-    </div>
-</div>
-
-<div id="fav-panel" class="side-panel">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
-        <h2 style="margin:0">Favorilerim ❤️</h2>
-        <span onclick="togglePanel('fav-panel')" style="cursor:pointer; opacity:0.3">✕</span>
-    </div>
-    <div id="fav-list" style="flex:1; overflow-y:auto"></div>
-</div>
-
-<section style="text-align: center; padding: 70px 20px 30px;">
-    <h1 style="font-size:3.2rem; letter-spacing:-2.5px; margin:0;"><span id="welcome-msg">Premium</span> Koleksiyon.</h1>
+<section class="hero">
+    <h1>Tarzını Yansıt.</h1>
+    <p>Sıradanlığı geride bırakın, detaylardaki zarafeti keşfedin. Sizin hikayeniz, sizin aksesuarlarınız.</p>
 </section>
 
-<main class="grid" id="main-grid"></main>
+<main class="grid" id="p-grid"></main>
+
+<div id="auth-modal">
+    <div class="modal-content" id="l-box">
+        <button class="modal-close-btn" onclick="closeA()">✕</button>
+        <h2>Giriş Yap</h2>
+        <div class="input-group">
+            <input type="text" id="ln" placeholder="İsminiz">
+            <input type="password" id="lp" placeholder="Şifreniz">
+        </div>
+        <button onclick="login()" style="width:100%; padding:15px; background:var(--text); color:var(--bg); border:none; border-radius:15px; font-weight:700; cursor:pointer;">Devam Et</button>
+        <p onclick="switchA('r')" style="font-size:0.9rem; cursor:pointer; margin-top:20px; color:var(--accent)">Hemen Kayıt Ol</p>
+    </div>
+    
+    <div class="modal-content" id="r-box" style="display:none">
+        <button class="modal-close-btn" onclick="closeA()">✕</button>
+        <h2>Yeni Üyelik</h2>
+        <div class="input-group">
+            <input type="text" id="rn" placeholder="Ad Soyad">
+            <input type="password" id="rp" placeholder="Şifre">
+            <textarea id="ra" placeholder="Teslimat Adresiniz (Sipariş için gereklidir)" rows="3"></textarea>
+        </div>
+        <button onclick="register()" style="width:100%; padding:15px; background:var(--accent); color:white; border:none; border-radius:15px; font-weight:700; cursor:pointer;">Kaydı Tamamla</button>
+        <p onclick="switchA('l')" style="font-size:0.9rem; cursor:pointer; margin-top:20px;">Giriş Ekranına Dön</p>
+    </div>
+</div>
+
+<div id="cart-p" class="side-panel">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px">
+        <h2>Çantam 👜</h2>
+        <button onclick="toggleP('cart-p')" style="background:none; border:none; font-size:1.5rem; cursor:pointer">✕</button>
+    </div>
+    <div id="c-items" style="flex:1; overflow-y:auto"></div>
+    <div style="margin-top:auto; padding-top:20px; border-top:1px solid rgba(0,0,0,0.05)">
+        <div style="display:flex; justify-content:space-between; font-weight:800; font-size:1.3rem; margin-bottom:20px"><span>Toplam</span> <span id="t-price">0 TL</span></div>
+        <button onclick="order()" style="width:100%; padding:15px; background:var(--wa-green); color:white; border:none; border-radius:15px; font-weight:700; cursor:pointer;">WhatsApp ile Siparişi Tamamla</button>
+    </div>
+</div>
+
+<div id="fav-p" class="side-panel">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px">
+        <h2>Favoriler ❤️</h2>
+        <button onclick="toggleP('fav-p')" style="background:none; border:none; font-size:1.5rem; cursor:pointer">✕</button>
+    </div>
+    <div id="f-items"></div>
+</div>
 
 <script>
-    const telNo = "905319160517"; 
-    const urunler = [
+    const tel = "905319160517";
+    const products = [
         { id: 1, ad: "Zarif Tek Taş Kolye", fiyat: 200, resim: "https://cdn.shopier.app/pictures_mid/SO_ACCESSORY_6066f6b707841ca996f55799cd597b8e.jpeg" },
         { id: 2, ad: "Papatya Desenli Kılıf", fiyat: 350, resim: "https://cdn.shopier.app/pictures_mid/SO_ACCESSORY_daafe5c82bb236edc4781ed0675d1f7a.jpeg" },
         { id: 3, ad: "Yeşil Lotus Çiçeği Seti", fiyat: 350, resim: "https://cdn.shopier.app/pictures_large/SO_ACCESSORY_25fd6aaa15e32d8a0df01285acade74e.jpeg" },
         { id: 4, ad: "Roma Rakamlı Zümrüt Kolye", fiyat: 200, resim: "https://cdn.shopier.app/pictures_large/SO_ACCESSORY_13cde4ecda550267783ce66fa91576a8.jpeg" }
     ];
 
-    let sepet = JSON.parse(localStorage.getItem('so_sepet_v5')) || [];
-    let favoriler = JSON.parse(localStorage.getItem('so_favs_v5')) || [];
-    let activeUser = JSON.parse(localStorage.getItem('so_active_v5')) || null;
-    let registeredUsers = JSON.parse(localStorage.getItem('so_members_v5')) || [];
+    let cart = JSON.parse(localStorage.getItem('c_v16')) || [];
+    let favs = JSON.parse(localStorage.getItem('f_v16')) || [];
+    let user = JSON.parse(localStorage.getItem('u_v16')) || null;
+    let users = JSON.parse(localStorage.getItem('us_v16')) || [];
 
-    function urunleriBas() {
-        const grid = document.getElementById('main-grid');
-        if(!grid) return;
-        grid.innerHTML = "";
-        urunler.forEach(u => {
-            const isFav = favoriler.includes(u.id) ? 'active' : '';
-            grid.innerHTML += `
-                <div class="kart">
-                    <div class="img-box"><img src="${u.resim}"></div>
-                    <div class="info">
-                        <h3>${u.ad}</h3>
-                        <p>${u.fiyat} TL</p>
-                        <div class="btn-group">
-                            <button class="btn btn-add" onclick="sepeteEkle(${u.id})">Sepete Ekle</button>
-                            <button class="btn btn-fav ${isFav}" onclick="toggleFav(${u.id})">❤️</button>
-                        </div>
-                    </div>
-                </div>`;
-        });
+    function render(data = products) {
+        document.getElementById('p-grid').innerHTML = data.map(p => `
+            <div class="kart">
+                <div style="height:180px; display:flex; align-items:center; justify-content:center; margin-bottom:15px;"><img src="${p.resim}" style="max-width:85%; max-height:85%;"></div>
+                <h3 style="text-align:center; font-size:0.95rem; margin:0 0 10px;">${p.ad}</h3>
+                <div style="text-align:center; font-weight:700; color:var(--accent); margin-bottom:15px;">${p.fiyat} TL</div>
+                <div style="display:flex; gap:10px; margin-top:auto;">
+                    <button onclick="add(${p.id})" style="flex:1; background:var(--text); color:var(--bg); border:none; padding:12px; border-radius:15px; font-weight:600; cursor:pointer;">Ekle</button>
+                    <button class="icon-btn" onclick="toggleF(${p.id})" style="width:45px; height:45px; background:rgba(255,59,48,0.1); border-radius:15px; color:var(--fav-red);">${favs.includes(p.id)?'❤️':'🤍'}</button>
+                </div>
+            </div>`).join('');
     }
 
-    function togglePass(id) {
-        const el = document.getElementById(id);
-        el.type = el.type === "password" ? "text" : "password";
+    function add(id) { 
+        const h = cart.find(c => c.id === id); 
+        if(h) h.adet++; else cart.push({...products.find(p => p.id === id), adet: 1}); 
+        save(); toggleP('cart-p');
     }
 
-    function switchAuth(type) {
-        document.getElementById('login-box').style.display = type === 'login' ? 'block' : 'none';
-        document.getElementById('reg-box').style.display = type === 'reg' ? 'block' : 'none';
+    function order() {
+        if(!cart.length) return;
+        if(!user) { alert("Sipariş için giriş yapmalısınız kankim!"); handleU(); return; }
+        let m = `*SO_ACCESSORY SİPARİŞ*%0A*Müşteri:* ${user.n}%0A*Adres:* ${user.a}%0A-----------------%0A`;
+        cart.forEach(i => m += `• ${i.ad} x${i.adet}%0A`);
+        m += `-----------------%0A*Toplam:* ${document.getElementById('t-price').innerText}`;
+        window.open(`https://wa.me/${tel}?text=${m}`);
     }
 
-    function performRegister() {
-        const name = document.getElementById('reg-name').value;
-        const pass = document.getElementById('reg-pass').value;
-        if(name && pass) {
-            registeredUsers.push({name, pass});
-            localStorage.setItem('so_members_v5', JSON.stringify(registeredUsers));
-            alert("Kayıt tamam! Giriş yapabilirsin.");
-            switchAuth('login');
-        }
-    }
-
-    function performLogin() {
-        const name = document.getElementById('login-name').value;
-        const pass = document.getElementById('login-pass').value;
-        const user = registeredUsers.find(u => u.name.toLowerCase() === name.toLowerCase() && u.pass === pass);
-        if(user) {
-            activeUser = user;
-            localStorage.setItem('so_active_v5', JSON.stringify(user));
-            document.getElementById('auth-modal').style.display = 'none';
-            updateUserUI();
-        } else { alert("İsim veya şifre yanlış!"); }
-    }
-
-    function handleUserClick() { if(!activeUser) document.getElementById('auth-modal').style.display = 'flex'; else logout(); }
-    
-    function logout() { 
-        if(confirm("Çıkış yapıyorsun, emin misin?")) {
-            activeUser = null; 
-            localStorage.removeItem('so_active_v5'); 
-            updateUserUI(); 
-        } 
-    }
-
-    function updateUserUI() { 
-        document.getElementById('user-display').innerText = activeUser ? activeUser.name : "Giriş Yap";
-        document.getElementById('welcome-msg').innerText = activeUser ? `Hoş Geldin, ${activeUser.name}!` : "Premium";
-    }
-
-    function sepeteEkle(id) {
-        const urun = urunler.find(u => u.id === id);
-        const sepetteki = sepet.find(s => s.id === id);
-        if(sepetteki) sepetteki.adet += 1; else sepet.push({...urun, adet: 1});
-        saveCart();
-    }
-
-    function adetDegistir(id, miktar) {
-        const item = sepet.find(s => s.id === id);
-        if(item) {
-            item.adet += miktar;
-            if(item.adet <= 0) sepet = sepet.filter(s => s.id !== id);
-            saveCart();
-        }
-    }
-
-    function saveCart() { localStorage.setItem('so_sepet_v5', JSON.stringify(sepet)); updateCartUI(); }
-
-    function updateCartUI() {
-        document.getElementById('cart-sayac').innerText = sepet.reduce((a, b) => a + b.adet, 0);
-        const list = document.getElementById('cart-list');
-        let total = 0;
-        if(sepet.length === 0) {
-            list.innerHTML = '<p style="text-align:center; opacity:0.3; margin-top:50px;">Sepetiniz boş.</p>';
-        } else {
-            list.innerHTML = sepet.map(u => {
-                total += (u.fiyat * u.adet);
-                return `<div class="list-item"><img src="${u.resim}"><div style="flex:1"><b>${u.ad}</b><br><span>${u.fiyat} TL</span><div class="qty-controls"><span onclick="adetDegistir(${u.id},-1)" style="cursor:pointer; font-weight:bold;">-</span> <b>${u.adet}</b> <span onclick="adetDegistir(${u.id},1)" style="cursor:pointer; font-weight:bold;">+</span></div></div></div>`;
-            }).join('');
-        }
-        document.getElementById('cart-total').innerText = total + " TL";
-    }
-
-    function toggleFav(id) {
-        if(favoriler.includes(id)) favoriler = favoriler.filter(f => f !== id);
-        else favoriler.push(id);
-        localStorage.setItem('so_favs_v5', JSON.stringify(favoriler));
-        urunleriBas();
-        updateFavUI();
-    }
-
-    function updateFavUI() {
-        document.getElementById('fav-sayac').innerText = favoriler.length;
-        const list = document.getElementById('fav-list');
-        const favItems = urunler.filter(u => favoriler.includes(u.id));
-        list.innerHTML = favItems.length === 0 ? '<p style="text-align:center; opacity:0.3; margin-top:50px;">Henüz favorin yok.</p>' :
-            favItems.map(u => `<div class="list-item"><img src="${u.resim}"><div><b>${u.ad}</b></div><span onclick="toggleFav(${u.id})" style="cursor:pointer; opacity:0.3">✕</span></div>`).join('');
-    }
-
-    function togglePanel(id) { document.getElementById(id).classList.toggle('open'); }
-
-    function temaDegistir() { 
+    function tTheme() { 
         document.body.classList.toggle('dark'); 
-        const isDark = document.body.classList.contains('dark'); 
-        document.getElementById('theme-btn').innerText = isDark ? "🌙" : "☀️"; 
+        document.getElementById('t-btn').innerText = document.body.classList.contains('dark') ? '🌙' : '☀️'; 
     }
 
-    function siparisVer() {
-        if(sepet.length === 0) return;
-        let msg = `*Yeni Sipariş (${activeUser ? activeUser.name : 'Misafir'})*%0A--------------------------%0A`;
-        sepet.forEach(u => msg += `• ${u.ad} x ${u.adet} = ${u.fiyat * u.adet} TL%0A`);
-        msg += `--------------------------%0A*Toplam:* ${document.getElementById('cart-total').innerText}`;
-        window.open(`https://wa.me/${telNo}?text=${msg}`, "_blank");
+    function register() {
+        const n = document.getElementById('rn').value, p = document.getElementById('rp').value, a = document.getElementById('ra').value;
+        if(n && p && a) { users.push({n, p, a}); localStorage.setItem('us_v16', JSON.stringify(users)); switchA('l'); alert("Kayıt başarılı! Giriş yapabilirsiniz."); }
     }
-
-    window.addEventListener('DOMContentLoaded', () => {
-        urunleriBas();
-        updateCartUI();
-        updateFavUI();
-        updateUserUI();
-    });
+    function login() {
+        const n = document.getElementById('ln').value, p = document.getElementById('lp').value;
+        const f = users.find(u => u.n === n && u.p === p);
+        if(f) { user = f; localStorage.setItem('u_v16', JSON.stringify(user)); closeA(); updateU(); } else alert("Kullanıcı bulunamadı!");
+    }
+    function updateQty(id, d) { const i = cart.find(c => c.id === id); if(i) { i.adet += d; if(i.adet <= 0) cart = cart.filter(c => c.id !== id); save(); } }
+    function save() { localStorage.setItem('c_v16', JSON.stringify(cart)); updateC(); }
+    function updateC() {
+        document.getElementById('c-count').innerText = cart.reduce((a,b)=>a+b.adet, 0);
+        let t = 0;
+        document.getElementById('c-items').innerHTML = cart.map(i => {
+            t += (i.fiyat * i.adet);
+            return `<div style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
+                <img src="${i.resim}" width="50" style="border-radius:8px">
+                <div style="flex:1; font-size:0.85rem"><b>${i.ad}</b></div>
+                <div style="display:flex; align-items:center; gap:8px; background:rgba(0,0,0,0.05); padding:4px 8px; border-radius:10px;">
+                    <button onclick="updateQty(${i.id},-1)" style="border:none; background:none; cursor:pointer;">-</button>
+                    <span>${i.adet}</span>
+                    <button onclick="updateQty(${i.id},1)" style="border:none; background:none; cursor:pointer;">+</button>
+                </div>
+            </div>`;
+        }).join('');
+        document.getElementById('t-price').innerText = t + " TL";
+    }
+    function handleU() { if(!user) document.getElementById('auth-modal').style.display='flex'; else if(confirm("Çıkış yapılsın mı?")) { user = null; localStorage.removeItem('u_v16'); updateU(); } }
+    function updateU() { document.getElementById('u-display').innerText = user ? user.n : "Giriş"; }
+    function closeA() { document.getElementById('auth-modal').style.display='none'; }
+    function switchA(t) { document.getElementById('l-box').style.display = t=='l'?'block':'none'; document.getElementById('r-box').style.display = t=='r'?'block':'none'; }
+    function toggleP(id) { document.getElementById(id).classList.toggle('open'); }
+    function toggleF(id) { if(favs.includes(id)) favs = favs.filter(f => f!==id); else favs.push(id); localStorage.setItem('f_v16', JSON.stringify(favs)); document.getElementById('f-count').innerText = favs.length; render(); }
+    function search() { const t = document.getElementById('searchInput').value.toLowerCase(); render(products.filter(p => p.ad.toLowerCase().includes(t))); }
+    window.addEventListener('DOMContentLoaded', () => { render(); updateC(); updateU(); document.getElementById('f-count').innerText = favs.length; });
 </script>
 </body>
 </html>
