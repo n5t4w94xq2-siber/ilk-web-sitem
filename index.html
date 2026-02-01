@@ -3,143 +3,260 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SO_ACCESSORY | Official Store</title>
+    <title>SO_ACCESSORY | Premium Store</title>
     <style>
-        :root {
-            --bg-body: #f5f5f7; --bg-card: #ffffff; --text-main: #1d1d1f;
-            --accent: #0071e3; --ios-green: #34c759; --glass: rgba(255, 255, 255, 0.7);
+        :root { 
+            --bg: #f5f5f7; --card: #ffffff; --text: #1d1d1f; 
+            --accent: #0071e3; --wa-green: #2ecc71; --header-bg: rgba(255, 255, 255, 0.8);
         }
-        .karanlik-tema {
-            --bg-body: #000000; --bg-card: #1c1c1e; --text-main: #f5f5f7;
-            --glass: rgba(28, 28, 30, 0.8);
+        .dark { 
+            --bg: #000000; --card: #1c1c1e; --text: #f5f5f7; 
+            --header-bg: rgba(0, 0, 0, 0.8);
         }
-        body {
-            background-color: var(--bg-body); color: var(--text-main);
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-            margin: 0; transition: all 0.4s ease; overflow-x: hidden;
-        }
-        header {
-            position: sticky; top: 0; z-index: 1000; padding: 15px 5%;
-            display: flex; justify-content: space-between; align-items: center;
-            background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(0,0,0,0.1);
-        }
-        .nav-sag { display: flex; align-items: center; gap: 20px; }
         
-        /* EMOJI SWITCH */
-        .switch { position: relative; display: inline-block; width: 55px; height: 28px; cursor: pointer; }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: #d1d1d6; transition: .4s; border-radius: 34px; }
-        .slider:before { position: absolute; content: "☀️"; display: flex; align-items: center; justify-content: center; height: 22px; width: 22px; left: 3px; bottom: 3px; background: white; transition: .4s; border-radius: 50%; font-size: 12px; }
-        input:checked + .slider { background: var(--ios-green); }
-        input:checked + .slider:before { transform: translateX(27px); content: "🌙"; }
-
-        /* SEPET PANEL */
-        #sepet-panel {
-            position: fixed; top: 0; right: -400px; width: 350px; height: 100vh;
-            background: var(--bg-card); z-index: 2000; transition: 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-            box-shadow: -10px 0 30px rgba(0,0,0,0.2); display: flex; flex-direction: column;
+        body { 
+            background-color: var(--bg); color: var(--text); 
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif; 
+            margin: 0; transition: background 0.5s; overflow-x: hidden; 
         }
-        #sepet-panel.acik { right: 0; }
-        .sepet-ic { padding: 30px; display: flex; flex-direction: column; height: 100%; box-sizing: border-box; }
-        #sepet-listesi { flex-grow: 1; overflow-y: auto; margin: 20px 0; }
-        .sepet-item { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .sepet-item img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
 
-        /* ÜRÜNLER */
-        .urun-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; padding: 40px 8%; }
-        .kart { background: var(--bg-card); border-radius: 25px; padding: 20px; text-align: center; border: 1px solid rgba(0,0,0,0.05); transition: 0.3s; }
-        .kart:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .kart img { width: 100%; height: 250px; object-fit: contain; border-radius: 15px; margin-bottom: 15px; }
+        /* HEADER */
+        header { 
+            position: sticky; top: 0; z-index: 1000; padding: 15px 8%; 
+            display: flex; justify-content: space-between; align-items: center; 
+            background: var(--header-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); 
+            border-bottom: 1px solid rgba(0,0,0,0.05); 
+        }
+
+        .nav-actions { display: flex; align-items: center; gap: 20px; }
+
+        .cart-trigger { 
+            position: relative; cursor: pointer; font-size: 1.6rem; 
+            transition: transform 0.2s; display: flex; align-items: center;
+        }
+        .badge { 
+            position: absolute; top: -5px; right: -10px; background: var(--accent); color: white; 
+            font-size: 0.75rem; padding: 2px 7px; border-radius: 12px; font-weight: bold;
+        }
+
+        .theme-switch { 
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            width: 42px; height: 42px; border-radius: 50%; background: rgba(0,0,0,0.05);
+            transition: 0.3s; font-size: 1.2rem;
+        }
+        .dark .theme-switch { background: rgba(255,255,255,0.1); }
+
+        /* GRID & CARDS */
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 30px; padding: 40px 8%; 
+        }
         
-        .buy-btn { width: 100%; padding: 15px; border-radius: 12px; border: none; background: var(--ios-green); color: white; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        .buy-btn:active { transform: scale(0.95); }
-        .checkout-btn { width: 100%; padding: 18px; border-radius: 15px; border: none; background: var(--accent); color: white; font-weight: 700; cursor: pointer; }
+        .kart { 
+            background: var(--card); border-radius: 30px; padding: 20px; 
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.02);
+        }
+        .kart:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+
+        .img-box { 
+            background: #fbfbfd; border-radius: 20px; height: 260px; 
+            display: flex; align-items: center; justify-content: center; overflow: hidden; 
+        }
+        .dark .img-box { background: #2c2c2e; }
+        .kart img { max-width: 90%; max-height: 90%; object-fit: contain; transition: 0.5s; }
+
+        .info { padding: 20px 5px 5px; text-align: left; }
+        .info h3 { margin: 0; font-size: 1.15rem; font-weight: 600; min-height: 3rem; line-height: 1.4; }
+        .info p { color: var(--accent); font-weight: 800; font-size: 1.4rem; margin: 12px 0; }
+
+        .btn { 
+            width: 100%; padding: 16px; border-radius: 18px; border: none; 
+            font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 1rem;
+        }
+        .btn-add { background: var(--text); color: var(--bg); }
+        .btn-add:hover { opacity: 0.8; }
+        
+        /* SIDE PANEL */
+        #panel { 
+            position: fixed; top: 0; right: -450px; width: 380px; height: 100vh; 
+            background: var(--card); z-index: 2000; transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1); 
+            padding: 30px; box-shadow: -15px 0 50px rgba(0,0,0,0.15); display: flex; flex-direction: column;
+            box-sizing: border-box;
+        }
+        #panel.open { right: 0; }
+        .item { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; padding: 12px; background: rgba(0,0,0,0.03); border-radius: 18px; }
+        .dark .item { background: rgba(255,255,255,0.05); }
+        .item img { width: 55px; height: 55px; border-radius: 12px; object-fit: cover; }
+
+        @media (max-width: 600px) {
+            #panel { width: 100%; right: -100%; }
+            .grid { grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px 15px; }
+            .img-box { height: 160px; }
+            .info h3 { font-size: 0.9rem; min-height: 2.5rem; }
+        }
     </style>
 </head>
 <body>
 
 <header>
-    <div style="font-weight: 900; letter-spacing: -1px;">SO_ACCESSORY</div>
-    <div class="nav-sag">
-        <div onclick="toggleSepet()" style="cursor:pointer; font-size: 1.4rem; position: relative;">
-            👜 <span id="sayac" style="position:absolute; top:-5px; right:-10px; background:var(--accent); color:white; font-size:0.7rem; padding:2px 6px; border-radius:10px;">0</span>
+    <div style="font-weight: 800; font-size: 1.5rem; letter-spacing: -1.2px;">SO_ACCESSORY</div>
+    <div class="nav-actions">
+        <div class="cart-trigger" onclick="toggleSepet()">
+            👜<span id="sayac" class="badge">0</span>
         </div>
-        <label class="switch">
-            <input type="checkbox" id="t-sw" onclick="tema()">
-            <span class="slider"></span>
-        </label>
+        <div class="theme-switch" id="theme-btn" onclick="temaDegistir()">☀️</div>
     </div>
 </header>
 
-<div id="sepet-panel">
-    <div class="sepet-ic">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <h2 style="margin:0">Sepetim</h2>
-            <span onclick="toggleSepet()" style="cursor:pointer; opacity:0.5">Kapat</span>
+<div id="panel">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 25px;">
+        <h2 style="margin:0; letter-spacing: -1px;">Çantam</h2>
+        <div onclick="toggleSepet()" style="cursor:pointer; font-size: 1.8rem; opacity: 0.3;">✕</div>
+    </div>
+    <div id="sepet-liste" style="flex-grow: 1; overflow-y: auto;"></div>
+    <div style="margin-top: 20px; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 25px;">
+        <div style="display:flex; justify-content:space-between; font-weight:800; font-size:1.4rem; margin-bottom:20px;">
+            <span>Toplam:</span> <span id="toplam">0 TL</span>
         </div>
-        <div id="sepet-listesi"></div>
-        <div style="border-top:1px solid rgba(0,0,0,0.1); padding-top:20px;">
-            <div style="display:flex; justify-content:space-between; font-weight:800; margin-bottom:20px;">
-                <span>Toplam:</span> <span id="toplam">0 TL</span>
-            </div>
-            <button class="checkout-btn" onclick="window.location.href='https://www.shopier.com/SO_ACCESSORY'">Shopier ile Güvenle Öde</button>
-        </div>
+        <button class="btn" style="background:var(--wa-green); color:white; display:flex; align-items:center; justify-content:center; gap:10px;" onclick="siparisVer()">
+            <span>💬 WhatsApp Siparişi</span>
+        </button>
     </div>
 </div>
 
-<section style="text-align:center; padding:60px 20px;">
-    <h1 style="font-size:3rem; letter-spacing:-2px; margin-bottom:10px;">Premium <span style="color:var(--accent)">Aksesuar</span></h1>
-    <p style="opacity:0.6;">Shopier güvencesiyle tarzını tamamla.</p>
+<section style="text-align: center; padding: 80px 20px 20px;">
+    <h1 style="font-size:3.5rem; letter-spacing:-3px; margin:0;">Zerafetin <span id="slogan" style="color:var(--accent)">Işıltısı.</span></h1>
+    <p style="opacity:0.5; font-size: 1.1rem; margin-top:15px;">Size özel seçimler, kalıcı şıklık.</p>
 </section>
 
-<main class="urun-grid" id="grid"></main>
+<main class="grid" id="grid-container"></main>
 
 <script>
-    // BURAYA SHOPIER'DEKİ ÜRÜNLERİNİ EKLE KANKİM
+    const telNo = "905319160517"; 
+    
+    // ÜRÜN LİSTESİ
     const urunler = [
         { id: 1, ad: "Zarif Tek Taş Kolye", fiyat: 200, resim: "https://cdn.shopier.app/pictures_mid/SO_ACCESSORY_6066f6b707841ca996f55799cd597b8e.jpeg" },
         { id: 2, ad: "Papatya Desenli Kılıf", fiyat: 350, resim: "https://cdn.shopier.app/pictures_mid/SO_ACCESSORY_daafe5c82bb236edc4781ed0675d1f7a.jpeg" },
-        { id: 3, ad: "Vintage Altın Yüzük", fiyat: 290, resim: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=500" },
-        { id: 4, ad: "Gümüş Zincir Bileklik", fiyat: 180, resim: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=500" },
-        // Yeni ürünleri buraya eklemeye devam edebilirsin kankim...
+        { id: 3, ad: "Yeşil Lotus Çiçeği Seti", fiyat: 350, resim: "https://cdn.shopier.app/pictures_large/SO_ACCESSORY_25fd6aaa15e32d8a0df01285acade74e.jpeg" },
+        { id: 4, ad: "Roma Rakamlı Zümrüt Kolye", fiyat: 200, resim: "https://cdn.shopier.app/pictures_large/SO_ACCESSORY_13cde4ecda550267783ce66fa91576a8.jpeg" }
     ];
 
-    let sepet = [];
+    // SEPETİ YÜKLE
+    let sepet = JSON.parse(localStorage.getItem('so_sepet_v2')) || [];
 
-    function bas() {
-        document.getElementById('grid').innerHTML = urunler.map(u => `
-            <div class="kart">
-                <img src="${u.resim}">
-                <h3 style="margin:10px 0; font-size:1.1rem;">${u.ad}</h3>
-                <span style="color:var(--accent); font-weight:800; font-size:1.4rem; display:block; margin-bottom:15px;">${u.fiyat} TL</span>
-                <button class="buy-btn" onclick="ekle(${u.id})">Sepete Ekle</button>
-            </div>
-        `).join('');
+    // ANA ÜRÜN GÖSTERİMİ
+    function urunleriBas() {
+        const grid = document.getElementById('grid-container');
+        if(!grid) return;
+        
+        let html = "";
+        urunler.forEach(u => {
+            html += `
+                <div class="kart">
+                    <div class="img-box">
+                        <img src="${u.resim}" alt="${u.ad}" onerror="this.src='https://placehold.co/400x400?text=Görsel+Yükleniyor'">
+                    </div>
+                    <div class="info">
+                        <h3>${u.ad}</h3>
+                        <p>${u.fiyat} TL</p>
+                        <button class="btn btn-add" onclick="sepeteEkle(${u.id})">Sepete Ekle</button>
+                    </div>
+                </div>
+            `;
+        });
+        grid.innerHTML = html;
     }
 
-    function ekle(id) {
-        sepet.push(urunler.find(x => x.id === id));
-        guncelle();
+    function sepeteEkle(id) {
+        const urun = urunler.find(x => x.id === id);
+        if(urun) {
+            sepet.push({...urun, uniqueId: Date.now()});
+            sepetiKaydet();
+            document.getElementById('panel').classList.add('open');
+        }
     }
 
-    function guncelle() {
+    function sepettenSil(index) {
+        sepet.splice(index, 1);
+        sepetiKaydet();
+    }
+
+    function sepetiKaydet() {
+        localStorage.setItem('so_sepet_v2', JSON.stringify(sepet));
+        arayuzGuncelle();
+    }
+
+    function arayuzGuncelle() {
+        // Sayaç ve Toplam
         document.getElementById('sayac').innerText = sepet.length;
-        document.getElementById('sepet-listesi').innerHTML = sepet.map((u, i) => `
-            <div class="sepet-item">
-                <img src="${u.resim}">
-                <div style="flex:1"><b>${u.ad}</b><br><small>${u.fiyat} TL</small></div>
-                <span onclick="sil(${i})" style="cursor:pointer; opacity:0.3">✕</span>
-            </div>
-        `).join('');
-        document.getElementById('toplam').innerText = sepet.reduce((a,b) => a + b.fiyat, 0) + " TL";
+        const liste = document.getElementById('sepet-liste');
+        let toplam = 0;
+        
+        if(sepet.length === 0) {
+            liste.innerHTML = '<p style="text-align:center; opacity:0.3; margin-top:50px; font-weight:600;">Çantanız boş kankim.</p>';
+        } else {
+            let itemHtml = "";
+            sepet.forEach((u, i) => {
+                toplam += u.fiyat;
+                itemHtml += `
+                    <div class="item">
+                        <img src="${u.resim}">
+                        <div style="flex:1">
+                            <b style="font-size:0.9rem; display:block; margin-bottom:3px;">${u.ad}</b>
+                            <span style="color:var(--accent); font-weight:700;">${u.fiyat} TL</span>
+                        </div>
+                        <span onclick="sepettenSil(${i})" style="cursor:pointer; font-size:1.2rem; opacity:0.3;">✕</span>
+                    </div>
+                `;
+            });
+            liste.innerHTML = itemHtml;
+        }
+        document.getElementById('toplam').innerText = toplam + " TL";
     }
 
-    function sil(i) { sepet.splice(i, 1); guncelle(); }
-    function toggleSepet() { document.getElementById('sepet-panel').classList.toggle('acik'); }
-    function tema() { document.body.classList.toggle('karanlik-tema'); }
+    function toggleSepet() {
+        document.getElementById('panel').classList.toggle('open');
+    }
 
-    window.onload = bas;
+    function temaDegistir() {
+        document.body.classList.toggle('dark');
+        const isDark = document.body.classList.contains('dark');
+        document.getElementById('theme-btn').innerText = isDark ? "🌙" : "☀️";
+        localStorage.setItem('so_tema', isDark ? 'dark' : 'light');
+    }
+
+    function siparisVer() {
+        if(sepet.length === 0) return alert("Sepetiniz boş!");
+        let mesaj = "*Yeni Sipariş Formu*%0A--------------------------%0A";
+        sepet.forEach(u => mesaj += `• ${u.ad} (${u.fiyat} TL)%0A`);
+        mesaj += `--------------------------%0A*Toplam:* ${document.getElementById('toplam').innerText}%0A%0ASiparişi onaylıyorum.`;
+        window.open(`https://wa.me/${telNo}?text=${mesaj}`, "_blank");
+    }
+
+    // SAYFA AÇILDIĞINDA
+    window.onload = () => {
+        urunleriBas();
+        arayuzGuncelle();
+        // Tema kontrol
+        if(localStorage.getItem('so_tema') === 'dark') {
+            document.body.classList.add('dark');
+            document.getElementById('theme-btn').innerText = "🌙";
+        }
+    };
+
+    // Slogan döngüsü
+    const sloglar = ["Işıltısı.", "Tarzı.", "Ruhu.", "Adresi."];
+    let sIdx = 0;
+    setInterval(() => {
+        const sEl = document.getElementById('slogan');
+        if(sEl) {
+            sIdx = (sIdx + 1) % sloglar.length;
+            sEl.innerText = sloglar[sIdx];
+        }
+    }, 3000);
 </script>
 </body>
 </html>
